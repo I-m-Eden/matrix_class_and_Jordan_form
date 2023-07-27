@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage{CJK}
+\usepackage{ctex}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{times}
+\usepackage{caption}
+\usepackage{framed} 
+
+\geometry{left=2cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\usepackage{fancyhdr}
+
+
+\newcommand{\super}[1]{\textsuperscript{#1}}
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+\newcommand{\bd}{\boldsymbol}
+\newcommand{\hs}{\hspace{\ccwd}}
+\newcommand{\rref}[1]{\ (\ref{#1})}
+\newcommand{\Lo}{\boldsymbol L_{\rm{O}}}
+\newcommand{\ao}{\boldsymbol a_{\rm{O}}}
+\newcommand{\vo}{\boldsymbol v_{\rm{O}}}
+\newcommand{\beginmulticol}{\begin{multicols}{2}\noindent\linespread{1.5}\songti\normalsize}
+\newcommand{\plainpage}{\newpage\thispagestyle{plain}}
+\renewcommand{\refname}{\large 参考文献：}
+\renewcommand{\figurename}{\small 图}
+
+\makeatletter
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\heiti\large}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\heiti\normalsize}}
+\newcommand\figurecaption{\def\@captype{figure}\caption}
+\captionsetup{labelformat=default,labelsep=space,font={small}}
+\makeatother
+
+\makeatletter
+    \newcommand{\makeheadrule}{%
+    \makebox[0pt][l]{\rule[0.55\baselineskip]{\headwidth}{0.4pt}}%
+    \rule[0.7\baselineskip]{\headwidth}{0.4pt}}
+    \renewcommand{\headrule}{%
+    {\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+    \makeheadrule}}
+\makeatother
+
+
+
+\begin{document}
+\begin{CJK*}{GBK}{kai}
+
+\title{\LARGE \heiti 约当分解计算器}
+\date{}
+\author{\large \fangsong 方尤乐 \\ \footnotesize \fangsong（北京大学\ 地球与空间科学学院,\ 北京\hs 100871 ） }
+\maketitle
+\cfoot{\thepage}
+\section{题目描述}
+在线性代数中一个很重要的定理是\ \textbf{Jordan 标准型定理}：\par
+设\ $\bd{T}$ 为线性空间\ $\mathbb{F}^n$ 上的线性变换（$\mathbb{F}$ 为任意域），设\ $\bd{T}$ 在标准正交基下的矩阵为\ $A$．如果\ $A$ 的特征多项式在\ $\mathbb{F}[x]$ 中可以分解为一次因式的乘积，那么\ $A$ 总是可以通过相似变换变成由\ Jordan 块组成的分块对角矩阵（也称\ Jordan 矩阵），其中\ $r$ 级的\ Jordan 块形如
+\begin{align}
+    J_r(a)=\left(
+    \begin{matrix}
+		a&1&0&\cdots&0&0\\
+		0&a&1&\cdots&0&0\\
+        \vdots&\vdots&\vdots&&\vdots&\vdots\\
+        0&0&0&\cdots&a&1\\
+        0&0&0&\cdots&0&a
+	\end{matrix}
+    \right)
+\end{align}
+\par 例如：
+\begin{align}
+    A=\left(
+    \begin{matrix}
+		3&-4&0&2\\
+		4&-5&-2&4\\
+        0&0&3&-2\\
+        0&0&2&-1
+	\end{matrix}
+    \right)=SJS^{-1}=
+    S
+    \left(
+    \begin{matrix}
+		-1&1&0&0\\
+		0&-1&0&0\\
+        0&0&1&1\\
+        0&0&0&1
+	\end{matrix}
+    \right)
+    S^{-1}
+    ,\ 
+    \mbox{其中}\ S=
+    \left(
+    \begin{matrix}
+        1&1/4&1&1/2\\
+        1&0&1&0\\
+        0&0&1&1/2\\
+        0&0&1&0
+    \end{matrix}
+    \right)
+\end{align}
+\par Jordan 标准型在改变\ Jordan 块次序的意义下唯一，但它本身并不唯一．我们将\ Jordan 矩阵的对角元提出来成为一个对角矩阵\ $D_1$，令\ $J=D_1+D_2$，那么有
+\begin{align}
+A=SJS^{-1}=SD_1S^{-1}+SD_2S^{-1}=A_1+A_2
+\end{align}
+\par 我们称它为\textbf{\ Jordan 分解式}．可以证明这样的分解是唯一的：$A_1=SD_1S^{-1}$ 表示的线性变换作用在 $A$ 的每个广义特征子空间上都是纯量乘法．
+\par 现在我们在模\ $p$ 剩余类域（$p$ 为质数）上考虑这个问题。给定矩阵\ $A$，请你计算它的\ Jordan 分解式中的\ $A_1$．\textbf{数据保证\ $A$ 的特征多项式在\ $\mathbb{F}_p[x]$ 中可以分解为一次因式的乘积．}
+\section{输入输出格式}
+输入：\par
+第一行\ $n,p$，代表矩阵大小以及素数\ $p$．\par
+之后共\ $n$ 行，每行\ $n$ 个数．第\ $i$ 行第\ $j$ 个数表示\ $A_{i,j}$．
+\section{样例数据}
+输入：
+\begin{framed}\noindent
+4\ 23\\
+3\ 19\ 0\ 2\\
+4\ 18\ 21\ 4\\
+0\ 0\ 3\ 21\\
+0\ 0\ 2\ 22
+\end{framed}
+输出：
+\begin{framed}\noindent
+22\ 0\ 2\ 0\\
+0\ 22\ 0\ 2\\
+0\ 0\ 1\ 0\\
+0\ 0\ 0\ 1
+\end{framed}
+\section{数据范围}
+$20\%:\ n\le 20, p\le 1000$\par
+$50\%:\ n\le 50, p\le 10^6$\par
+$100\%:\ n\le 50, p\le 10^9$\par
+数据保证\ $A$ 的特征多项式在\ $\mathbb{F}_p[x]$ 中可以分解为一次因式的乘积．
+\\
+\end{CJK*}
+
+
+\end{document}
